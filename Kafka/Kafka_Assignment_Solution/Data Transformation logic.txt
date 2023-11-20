@@ -1,0 +1,8 @@
+  	#Change the category column to lowercase,in source it's in uppercase.
+        msg.value()['category'] = msg.value()['category'].lower() 
+        
+  	# updating the price to half if product belongs to 'category a'
+        if msg.value()['category'] == 'category a':
+            
+            msg.value()['price'] = msg.value()['price'] * 0.5
+            msg.value()['price'] = round(msg.value()['price'],2)

@@ -1,0 +1,30 @@
+--- Input for SQS in Event Bridge Pipe
+
+{
+    "orderType": "PURCHASE",
+    "orderId": "OID-123456",
+    "amount": 50.26,
+    "customerId": "CID-98765",
+    "address": "hello"
+}
+    
+
+
+--- Condition for Filter
+
+{
+  "body": {
+    "orderType": [{
+      "prefix": "PURCHASE"
+    }],
+    "amount": [ { "numeric": [ ">", 100 ] } ]
+  }
+}
+
+--- Use it in transformation
+
+{
+  "order_type": "<$.body.orderType>",
+  "order_id": "<$.body.orderId>",
+  "customer_id": "<$.body.customerId>"
+}

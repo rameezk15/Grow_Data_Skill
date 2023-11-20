@@ -1,0 +1,1 @@
+query = "SELECT * FROM product WHERE last_updated > '{}'".format(last_read_timestamp)

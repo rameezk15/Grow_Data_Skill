@@ -1,0 +1,25 @@
+Steps to install docker compose on GCP Dataproc Master node:
+
+# Update your existing list of packages
+sudo apt-get update
+
+# Install a few prerequisite packages which let apt use packages over HTTPS
+sudo apt-get install apt-transport-https ca-certificates curl software-properties-common
+
+# Add the GPG key for the official Docker repository to your system
+curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo apt-key add -
+
+# Add the Docker repository to APT sources
+sudo add-apt-repository "deb [arch=amd64] https://download.docker.com/linux/ubuntu $(lsb_release -cs) stable"
+
+# Update the package database with the Docker packages from the newly added repo
+sudo apt-get update
+
+# Finally, install Docker
+sudo apt-get install docker-ce
+
+# Download the current stable release of Docker Compose
+sudo curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+
+# Apply executable permissions to the Docker Compose binary
+sudo chmod +x /usr/local/bin/docker-compose

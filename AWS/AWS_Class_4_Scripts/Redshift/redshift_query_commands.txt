@@ -1,0 +1,67 @@
+--- Command to create schema in Redshift
+
+CREATE SCHEMA sales;
+
+================================================================
+
+--- Command to create table in Redshift
+
+CREATE TABLE sales.sales_raw (
+    id INT ENCODE lzo,
+    date DATE ENCODE bytedict,
+    product VARCHAR(255) ENCODE lzo,
+    quantity INT ENCODE delta,
+    revenue DECIMAL(10,2) ENCODE delta
+)
+DISTSTYLE KEY
+DISTKEY (date)
+SORTKEY (date, product);
+
+================================================================
+
+--- Command to load data in Redshift table
+
+COPY sales.sales_raw
+FROM 's3://redshift-data-gds/input/sales.csv' 
+IAM_ROLE 'arn:aws:iam::348532040329:role/service-role/AmazonRedshift-CommandsAccessRole-20230820T081203'
+DELIMITER ','
+IGNOREHEADER 1
+REGION 'us-east-1';
+
+================================================================
+
+--- Command to unload query result from Redshift to S3 in multiparts
+
+UNLOAD ('SELECT * FROM sales.sales_raw WHERE date = ''2023-08-01''') 
+TO 's3://redshift-data-gds/output/' 
+IAM_ROLE 'arn:aws:iam::348532040329:role/service-role/AmazonRedshift-CommandsAccessRole-20230820T081203' 
+DELIMITER ','
+ADDQUOTES
+ALLOWOVERWRITE
+REGION 'us-east-1';
+
+================================================================
+
+--- Command to unload query result from Redshift to S3 in single file
+
+UNLOAD ('SELECT * FROM sales.sales_raw WHERE date = ''2023-08-01''') 
+TO 's3://redshift-data-gds/output/' 
+IAM_ROLE 'arn:aws:iam::348532040329:role/service-role/AmazonRedshift-CommandsAccessRole-20230820T081203' 
+DELIMITER ','
+ADDQUOTES
+ALLOWOVERWRITE
+REGION 'us-east-1'
+PARALLEL OFF;
+
+================================================================
+
+--- Command to unload query result from Redshift to S3 along with manifest file
+
+UNLOAD ('SELECT * FROM sales.sales_raw WHERE date = ''2023-08-01''') 
+TO 's3://redshift-data-gds/output/' 
+IAM_ROLE 'arn:aws:iam::348532040329:role/service-role/AmazonRedshift-CommandsAccessRole-20230820T081203' 
+DELIMITER ','
+ADDQUOTES
+ALLOWOVERWRITE
+REGION 'us-east-1'
+MANIFEST;

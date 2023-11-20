@@ -1,0 +1,6 @@
+step 1. Load some rows into the mysql table.
+step 2. Start 5 instances of consumer code in  parallel with default offset mode.
+step 3. Run the producer code to load the data from Mysql table into producer.
+Now as soon as all records are loaded to producer,consumers should start parallely to consumer all records.
+step 4. Load more records in the mysql table and run the producer.
+Now producer should pick the records loaded after the records already were present in the table before the first iteration and these records must be picked up by the consumers automatically.
